@@ -11,9 +11,15 @@ var COLUMN_HEIGHT = 150;
 var barWidth = 40;
 var COLUMN_SPACE = 50;
 
-var renderCloud = function (ctx, x, y, color) {
-  ctx.fillStyle = color;
-  ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
+var drawRect = function (ctx, x, y, width, height, color) {
+  ctx.fillStyle = color || '#000';
+  ctx.fillRect(x, y, width, height);
+};
+
+var drawText = function (ctx, text, x, y, color, font) {
+  ctx.fillStyle = color || '#000';
+  ctx.font = font || '16px PT Mono';
+  ctx.fillText = (text, x, y);
 };
 
 var getMaxElement = function (arr) {
@@ -28,25 +34,26 @@ var getMaxElement = function (arr) {
 };
 
 window.renderStatistics = function (ctx, players, times) {
-  renderCloud(ctx, LEFT + GAP, TOP + GAP, 'rgba(0, 0, 0, 0.7)');
-  renderCloud(ctx, LEFT, TOP, '#fff');
+  drawRect(ctx, LEFT + GAP, TOP + GAP, CLOUD_WIDTH, CLOUD_HEIGHT, 'rgba(0, 0, 0, 0.7)');
+  drawRect(ctx, LEFT, TOP, CLOUD_WIDTH, CLOUD_HEIGHT, '#fff');
 
 
   var maxTime = getMaxElement(times);
-
   var scaleFactor = COLUMN_HEIGHT / maxTime;
+
+  drawText(ctx, 'Ура вы победили!', LEFT + TOP, FONT_GAP + GAP);
+  drawText(ctx, 'Список результатов:', LEFT + TOP, GAP + TEXT_HEIGHT);
 
   for (var i = 0; i < players.length; i++) {
     var barHeight = scaleFactor * times[i];
-    ctx.fillStyle = players[i] === 'Вы' ? 'rgba(255, 0 ,0, 1)' : 'hsl(240,' + Math.random() * 100 + '%, 50%)';
-    ctx.fillRect(LEFT + GAP + COLUMN_SPACE + (barWidth + COLUMN_SPACE) * i, LEFT + GAP + COLUMN_HEIGHT - barHeight - FONT_GAP, barWidth, barHeight);
+    var x = LEFT + GAP + COLUMN_SPACE + (barWidth + COLUMN_SPACE) * i;
+    var y = LEFT + GAP + COLUMN_HEIGHT - barHeight;
 
-    ctx.fillStyle = '#000';
-    ctx.font = '16px PT Mono';
-    ctx.fillText('Ура вы победили!', 110, FONT_GAP + GAP);
-    ctx.fillText('Список результатов:', 110, GAP + TEXT_HEIGHT);
-    ctx.fillText(players[i], LEFT + GAP + COLUMN_SPACE + (barWidth + COLUMN_SPACE) * i, CLOUD_HEIGHT - GAP);
-    ctx.fillText(Math.round(times[i]), LEFT + GAP + COLUMN_SPACE + (barWidth + COLUMN_SPACE) * i, LEFT + GAP + COLUMN_HEIGHT - barHeight - TEXT_HEIGHT);
+
+    drawRect(ctx, x, y - FONT_GAP, barWidth, barHeight, players[i] === 'Вы' ? 'rgba(255, 0 ,0, 1)' : 'hsl(240,' + Math.random() * 100 + '%, 50%)');
+
+    drawText(ctx, players[i], x, CLOUD_HEIGHT - GAP);
+    drawText(ctx, Math.round(times[i]), x, y - TEXT_HEIGHT);
   }
 
 };
