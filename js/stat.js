@@ -19,7 +19,7 @@ var drawRect = function (ctx, x, y, width, height, color) {
 var drawText = function (ctx, text, x, y, color, font) {
   ctx.fillStyle = color || '#000';
   ctx.font = font || '16px PT Mono';
-  ctx.fillText = (text, x, y);
+  ctx.fillText(text, x, y);
 };
 
 var getMaxElement = function (arr) {
