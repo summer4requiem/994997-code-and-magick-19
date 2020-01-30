@@ -2,35 +2,38 @@
 
 var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
 var WIZARD_SURNAME = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var EYES_COLOR = ['black', 'red', 'blue', 'yellow', 'green', 'rgb(56, 159, 117)'];
-var COAT_COLORS = ['rgba(101, 137, 164)', 'rgba(241, 43, 107)', 'rgba(146, 100, 161)', 'rgba(56, 159, 117)', 'rgba(215, 210, 55)', 'rgba(0, 0, 0)'];
+var EYES_COLOR = ['black', 'red', 'blue', 'yellow', 'green'];
+var COAT_COLORS = ['rgba(101, 137, 164)', 'rgba(241, 43, 107)', 'rgba(146, 100, 161)', 'rgba(56, 159, 117)', 'rgba(215, 210, 55)', 'rgba(215, 260, 55)'];
+// Персонажи
 var listSimilarWizard = document.querySelector('.setup-similar-list');
-var wizardsArray = [];
 
 document.querySelector('.setup-similar').classList.remove('hidden');
-document.querySelector('.setup').classList.remove('hidden');
 
+document.querySelector('.setup').classList.remove('hidden');
+// Шаблон для волшебника
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
 
 var getRandomData = function (array) {
-  return array[Math.floor(array) * array.length];
+  return Math.floor(Math.random() * Math.floor(array - 1));
+
 };
+
+// заполнение массива  персонажами
+var wizardsArray = [];
 
 var createNewWizzards = function (length) {
   for (var i = 0; i < length; i++) {
     wizardsArray.push({
-      name: getRandomData(WIZARD_NAMES) + '' + getRandomData(WIZARD_SURNAME),
-      coatColor: getRandomData(COAT_COLORS),
-      eyeColor: getRandomData(EYES_COLOR),
+      name: WIZARD_NAMES[getRandomData(WIZARD_NAMES.length)] + ' ' + WIZARD_NAMES[getRandomData(WIZARD_SURNAME.length)],
+      coatColor: COAT_COLORS[getRandomData(COAT_COLORS.length)],
+      eyesColor: EYES_COLOR[getRandomData(EYES_COLOR.length)]
     });
   }
-  return wizardsArray;
 };
 
-var wizards = createNewWizzards(4);
-// eslint-disable-next-line no-console
-console.log(wizards);
+createNewWizzards(wizardsArray);
+
 
 var drawWizards = function (wizard) {
   var wizardHeros = similarWizardTemplate.cloneNode(true);
@@ -41,7 +44,8 @@ var drawWizards = function (wizard) {
 };
 
 var fragment = document.createDocumentFragment();
-for (var i = 0; i < wizards.length; i++) {
-  fragment.appendChild(drawWizards(wizards));
+for (var i = 0; i < wizardsArray; i++) {
+  fragment.appendChild(drawWizards(wizardsArray[i]));
 }
+
 listSimilarWizard.appendChild(fragment);
