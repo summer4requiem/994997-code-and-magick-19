@@ -44,9 +44,12 @@ var drawWizards = function (wizard) {
   return wizardHeros;
 };
 
-var fragment = document.createDocumentFragment();
-for (var i = 0; i < wizardsArray.length; i++) {
-  fragment.appendChild(drawWizards(wizardsArray[i]));
-}
+var addPins = function () {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < wizardsArray.length; i++) {
+    fragment.appendChild(drawWizards(wizardsArray[i]));
+  }
+  listSimilarWizard.appendChild(fragment);
+};
 
-listSimilarWizard.appendChild(fragment);
+addPins();
