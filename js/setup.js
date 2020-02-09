@@ -27,7 +27,8 @@ var wizardCoat = setup.querySelector('.wizard-coat');
 var wizardEyes = setup.querySelector('.wizard-eyes');
 
 var onPopupEscPress = function (evt) {
-  if (evt.key === ESC_KEY) {
+  // если фокус в поле ввода имени, попап по ESC не закрывать
+  if (evt.key === ESC_KEY && !evt.targer.classList.contains(userNameInput)) {
     closePopup();
   }
 };
