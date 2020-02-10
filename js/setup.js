@@ -3,24 +3,83 @@
 var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
 var WIZARD_SURNAME = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var EYES_COLOR = ['black', 'red', 'blue', 'yellow', 'green', 'lightblue'];
-var COAT_COLORS = ['rgba(0, 191, 255)', 'rgba(181, 48, 255)', 'rgba(47, 213, 137)', 'rgba(255, 0, 102)', 'rgba(215, 210, 55)'];
+var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 var MaxWizardsAmount = 4;
 
-// Персонажи
+var ESC_KEY = 'Escape';
+var ENTER_KEY = 'Enter';
+
+var setup = document.querySelector('.setup');
 var listSimilarWizard = document.querySelector('.setup-similar-list');
-
+var closeSetup = document.querySelector('.setup-close');
 document.querySelector('.setup-similar').classList.remove('hidden');
-
-document.querySelector('.setup').classList.remove('hidden');
-// Шаблон для волшебника
+var setupOpen = document.querySelector('.setup-open');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+var userNameInput = setup.querySelector('.setup-user-name');
+
+var inputCoatColor = setup.querySelector('input[name="coat-color"]');
+var inputEyesColor = setup.querySelector('input[name="eyes-color"]');
+var inputFireBallColor = setup.querySelector('input[name="fireball-color"]');
+
+var wizardFireball = setup.querySelector('.setup-fireball-wrap');
+var wizardCoat = setup.querySelector('.wizard-coat');
+var wizardEyes = setup.querySelector('.wizard-eyes');
+
+var onPopupEscPress = function (evt) {
+  // если фокус в поле ввода имени, попап по ESC не закрывать
+  if (evt.key === ESC_KEY && !evt.targer.classList.contains(userNameInput)) {
+    closePopup();
+  }
+};
+
+var openPopup = function () {
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var closePopup = function () {
+  setup.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    openPopup();
+  }
+});
+
+closeSetup.addEventListener('click', function () {
+  closePopup();
+});
+
+closeSetup.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    closePopup();
+  }
+});
 
 
 var getRandomData = function (array) {
   return Math.floor(Math.random() * array.length);
 };
 
-// заполнение массива  персонажами
+userNameInput.addEventListener('invalid', function () {
+  if (userNameInput.validity.tooShort) {
+    userNameInput.setCustomValidity('Имя должно состоять минимум из 2 - х символов');
+  } else if (userNameInput.validity.tooLong) {
+    userNameInput.setCustomValidity('Имя не должно превышать 25 - ти символов');
+  } else if (userNameInput.validity.valueMissing) {
+    userNameInput.setCustomValidity('Обязательное поле');
+  } else {
+    userNameInput.setCustomValidity('');
+  }
+});
+
 var wizardsArray = [];
 
 var createNewWizzards = function (length) {
@@ -34,6 +93,26 @@ var createNewWizzards = function (length) {
 };
 
 createNewWizzards(MaxWizardsAmount);
+
+wizardCoat.addEventListener('click', function () {
+  var color = COAT_COLORS[getRandomData(COAT_COLORS)];
+  wizardCoat.style.fill = color;
+  inputCoatColor.value = color;
+});
+
+
+wizardEyes.addEventListener('click', function () {
+  var color = EYES_COLOR[getRandomData(EYES_COLOR)];
+  wizardEyes.style.fill = color;
+  inputEyesColor.value = color;
+});
+
+
+wizardFireball.addEventListener('click', function () {
+  var color = FIREBALL_COLORS[getRandomData(FIREBALL_COLORS)];
+  wizardFireball.style.background = color;
+  inputFireBallColor.value = color;
+});
 
 
 var drawWizards = function (wizard) {
@@ -52,4 +131,6 @@ var addPins = function () {
   listSimilarWizard.appendChild(fragment);
 };
 
+
 addPins();
+wizardCoat();
